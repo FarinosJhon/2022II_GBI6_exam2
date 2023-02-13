@@ -46,8 +46,38 @@ def alignment():
     clustalw_cline = ClustalwCommandline(clustalw_exe, infile = "data/coati.fasta")
     assert os.path.isfile(clustalw_exe), "Clustal_W executable is missing or not found"
     stdout, stderr = clustalw_cline()
-                   
-    ClustalAlign = AlignIO.read("data/coati.aln", "clustal")
+     
+    with open("data/coati.aln", "r") as jhon:    
+        ClustalAlign = AlignIO.read(jhon, "clustal")
 
-    return[ClustalAlign]
+    return["Aligned"]
+    
+##################################################################
+#Función 3. Árbol filogenético
+
+def tree():
+    from Bio import AlignIO
+    from Bio import Phylo 
+    from Bio.Phylo.TreeConstruction import DistanceCalculator 
+    
+    calculator = DistanceCalculator('identity')
+    
+    from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+    
+    constructor = DistanceTreeConstructor(calculator)
+    with open("data/coati.aln", "r") as alin: 
+        alignment = AlignIO.read(alin, "clustal")
+    
+    distance_matrix = calculator.get_distance(alignment)
+    
+    arbolito = constructor.build_tree(alignment)
+    arbolito.rooted = True
+    
+    Phylo.write(arbolito, "data/coati_phylotree.pdf", "phyloxml")
+    Phylo.read(file="data/coati_phylotree.pdf", format="phyloxml")
+    
+    Phylo.draw(arbolito)
+    
+    return[arbolito]
+    
     
