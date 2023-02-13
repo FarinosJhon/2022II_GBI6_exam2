@@ -25,10 +25,13 @@ with Entrez.efetch( db="nucleotide", rettype="gb", retmode="text", id= id_list
                   ) as handle: 
       for seq_record in SeqIO.parse(handle, "gb"): 
         coati.append(seq_record)
-        SeqIO.write(coati, "coati.gb", "genbank")  
+        SeqIO.write(coati, "data/coati.gb", "genbank")  
 
 #################################################################
 #Función 2. Alineamiento de secuencias
+from Bio import SeqIO
+from Bio import AlignIO
+from Bio import Phylo
 from Bio.Align.Applications import ClustalwCommandline
 import os
 
@@ -36,6 +39,15 @@ def alignment():
     """
      Sirve para extraer únicamente las secuencias de la variable coati y realiza un alineamiento usando clustalW.
     """
+    ella = SeqIO.parse("data/coati.gb", "genbank")
+    yo = SeqIO.write(ella, "data/coati.fasta", "fasta")
     
+    clustalw_exe = r"C:\Program Files (x86)\ClustalW2\clustalw2.exe"
+    clustalw_cline = ClustalwCommandline(clustalw_exe, infile = "data/coati.fasta")
+    assert os.path.isfile(clustalw_exe), "Clustal_W executable is missing or not found"
+    stdout, stderr = clustalw_cline()
+                   
+    ClustalAlign = AlignIO.read("data/coati.aln", "clustal")
 
+    return[ClustalAlign]
     
