@@ -56,6 +56,9 @@ def alignment():
 #Función 3. Árbol filogenético
 
 def tree():
+    """
+    Realiza el cálculo de las distancias utilizando coati.aln y finalmente que imprime en la pantalla el árbol filogenético y lo guarda en data como coati_phylotree.pdf
+    """
     from Bio import AlignIO
     from Bio import Phylo 
     from Bio.Phylo.TreeConstruction import DistanceCalculator 
